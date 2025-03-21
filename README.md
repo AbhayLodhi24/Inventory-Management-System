@@ -1,2 +1,2 @@
-# GitTrial
-Learning Git
+# Inventory Management System
+
