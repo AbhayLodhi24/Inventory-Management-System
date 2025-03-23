@@ -3,19 +3,33 @@
 <head>
     <title>Products</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./styles.css" rel="stylesheet">s
+    <link href="./styles.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="./script.js"></script>
 </head>
 <body class="bg-light p-4">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-3">Navbar</div>
-            <div class="col-9">
+            <!--Left section of Navbar-->
+            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column">
+                <h2>InventoFlow</h2>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-house-fill"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-inboxes-fill"></i> Products</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-card-list"></i> Categories</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cart-dash-fill"></i> Orders</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-truck"></i> Suppliers</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Users</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear-fill"></i> Profile</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                </ul>
+            </nav>
+            <!--Right section of Products page-->
+            <div class="col-md-9 col-lg-10 content bg-light">
                 <h1 class="mb-4">Products Page</h1>
                 <div class="d-flex justify-content-between mb-4">
-                    <input type="text" id="search" placeholder="Search products by name..." class="form-control w-50">
+                    <input type="text" id="search" placeholder="Search products by name..." class="form-control w-75">
                     <button id="addProductButton" class="btn btn-primary ml-3">Add Product</button>
                 </div>
                 <table class="table table-bordered table-hover">

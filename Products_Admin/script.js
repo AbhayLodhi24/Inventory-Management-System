@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    //Search functionality
+    $('#search').on('keyup', function() {
+        const value = $(this).val().toLowerCase();
+        $('tbody tr').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     // Open Add Product Modal
     $('#addProductButton').click(function () {
         $('#modal').modal('show');
@@ -56,8 +64,8 @@ $(document).ready(function () {
                     <td class="price">₹${price}</td>
                     <td class="stock"><span class="${stockClass}">${stock}</span></td>
                     <td>
-                        <a href="#" class="text-primary mr-2 editButton">Edit</a>
-                        <a href="#" class="text-danger deleteButton">Delete</a>
+                        <button class="btn btn-link editButton text-primary btn-no-underline">Edit</button>
+                        <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
                     </td>
                 </tr>
             `;
