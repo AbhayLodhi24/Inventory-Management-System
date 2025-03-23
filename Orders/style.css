@@ -35,7 +35,7 @@
 }
 .blue-card { background: #007bff; }
 .green-card { background: #28a745; }
-.yellow-card { background: #ffc107; }
+.yellow-card { background: #ffc107; color: black; }
 .purple-card { background: #6f42c1; }
 
 /* Content */
@@ -49,3 +49,17 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
+
+/* ---------------- */
+  .content {
+    padding: 2rem;
+  }
+  
+  .table thead {
+    background-color: #f8f9fa;
+  }
+  
+  .table th {
+    font-weight: 600;
+  }
+  
