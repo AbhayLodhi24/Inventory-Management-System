@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="./script.js"></script>
+</head>
+<body class="bg-light p-4">
+    <div class="container-fluid">
+        <div class="row">
+            <!--Left section of Navbar-->
+            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column">
+                <h2>InventoFlow</h2>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-house-fill"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-inboxes-fill"></i> Products</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-card-list"></i> Categories</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cart-dash-fill"></i> Orders</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-truck"></i> Suppliers</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Users</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear-fill"></i> Profile</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                </ul>
+            </nav>
+            <!--Right section of Users page-->
+            <div class="col-md-9 col-lg-10 content bg-light">
+                <h1 class="mb-4">Users Page</h1>
+                <div class="row">
+                    <div class="col-4">
+                        <form class="border border-success rounded p-4 shadow mx-auto" id="userForm">
+                            <h3 class="mb-4">Add a New User</h3>
+                            <div class="form-group">
+                                <label for="name">User Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="mail">User Email</label>
+                                <input type="email" class="form-control" id="mail" placeholder="Enter Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">Password</label>
+                                <input type="password" class="form-control" id="pwd" placeholder="******">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">User Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="Enter Address">
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Select Role</label>
+                                <select class="form-control" id="role">
+                                    <option disabled>Select Role</option>
+                                    <option value="admin">admin</option>
+                                    <option value="user">user</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="sumbitBtn" class="btn btn-primary">Add User</button>
+                        </form>
+                    </div>
+                    <div class="col-8">
+                        <div class="d-flex justify-content-between mb-4">
+                            <input type="text" id="search" placeholder="Search users by name..." class="form-control w-75">
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="uid">1</td>
+                                    <td class="name">admin</td>
+                                    <td class="email">admin@gmail.com</td>
+                                    <td class="role">admin</td>
+                                    <td>
+                                        <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="uid">2</td>
+                                    <td class="name">Sathvik</td>
+                                    <td class="email">sathvik@gmail.com</td>
+                                    <td class="role">user</td>
+                                    <td>
+                                        <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="uid">3</td>
+                                    <td class="name">bruce</td>
+                                    <td class="email">batman@gmail.com</td>
+                                    <td class="role">user</td>
+                                    <td>
+                                        <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+</body>
+</html>
