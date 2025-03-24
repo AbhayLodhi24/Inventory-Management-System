@@ -33,10 +33,10 @@ $(document).ready(function(){
         else{
             const newRow = `
             <tr>
-                <td class="name">${new_uid}</td>
-                <td class="category">${name}</td>
-                <td class="supplier">${email}</td>
-                <td class="price">${role}</td>
+                <td class="uid">${new_uid}</td>
+                <td class="name">${name}</td>
+                <td class="email">${email}</td>
+                <td class="role">${role}</td>
                 <td>
                     <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
                 </td>
