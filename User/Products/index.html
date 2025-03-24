@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
@@ -13,9 +15,9 @@
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column">
-                <h2>InventoFlow</h2>
+                <h4>JASPP<br>Inventory</h4>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-inboxes-fill"></i> Products</a></li>
+                    <li class="nav-item"><a href="./index.html" class="nav-link"><i class="bi bi-inboxes-fill"></i> Products</a></li>
                     <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-cart-dash-fill"></i> Orders</a></li>
                     <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear-fill"></i> Profile</a></li>
                     <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
@@ -25,7 +27,7 @@
             <!-- Main Content -->
             <main class="col-md-9 col-lg-10 content bg-light">
                 <div id="products" class="content-section">
-                    <h2>Products</h2>
+                    <h2 class="fs-1 fw-bolder mb-4">Products</h2>
                     <div class="search-container">
                         <select id="categoryFilter" class="form-control" style="width: 200px;">
                             <option value="">Select Category</option>
@@ -99,87 +101,17 @@
                 </div>               
             </main>
         </div>
-    </div>
-
-    <!-- <div class="content">
-        <div id="products" class="content-section">
-            <h2>Products</h2>
-            <div class="search-container">
-                <select id="categoryFilter" class="form-control" style="width: 200px;">
-                    <option value="">Select Category</option>
-                    <option value="Tech">Tech</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Electronic">Electronic</option>
-                </select>
-                <input type="text" id="searchInput" class="form-control" placeholder="Search products..." style="width: 300px;">
-            </div>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productTableBody">
-                        <tr>
-                            <td>1</td>
-                            <td>Mouse</td>
-                            <td>Tech</td>
-                            <td>$10</td>
-                            <td>20</td>
-                            <td><button class="btn btn-primary btn-sm order-btn">Order</button></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Hair Oil</td>
-                            <td>Fashion</td>
-                            <td>$15</td>
-                            <td>20</td>
-                            <td><button class="btn btn-primary btn-sm order-btn">Order</button></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>LED Light</td>
-                            <td>Electronic</td>
-                            <td>$5</td>
-                            <td>5</td>
-                            <td><button class="btn btn-primary btn-sm order-btn">Order</button></td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>PC</td>
-                            <td>Tech</td>
-                            <td>$400</td>
-                            <td>3</td>
-                            <td><button class="btn btn-primary btn-sm order-btn">Order</button></td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div id="orders" class="content-section" style="display: none;">
-            <h2>Orders</h2>
-            <p>Orders content goes here.</p>
-        </div>
-        <div id="profile" class="content-section" style="display: none;">
-            <h2>Profile</h2>
-            <p>Profile content goes here.</p>
-        </div>
-        <div id="logout" class="content-section" style="display: none;">
-            <h2>Logout</h2>
-            <p>Logout content goes here.</p>
-        </div>
-    </div> -->
-
+    </div>     
+   
+    <!-- Bootstrap & jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  
+      <!-- Custom Script -->
     <script src="script.js"></script>
 </body>
 </html>
