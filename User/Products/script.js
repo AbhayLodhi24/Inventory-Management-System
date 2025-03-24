@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    // Sidebar navigation
     $('.sidebar li').click(function() {
         $('.sidebar li').removeClass('active');
         $(this).addClass('active');
@@ -6,6 +7,7 @@ $(document).ready(function() {
         $('#' + $(this).data('content')).show();
     });
 
+    // Category and Search filter functionality
     $('#categoryFilter').change(function() {
         filterTable();
     });
@@ -30,4 +32,47 @@ $(document).ready(function() {
             }
         });
     }
+
+    // Open modal and set stock value
+    $(".order-btn").on("click", function () {
+        const $row = $(this).closest("tr");
+        const productId = $row.find("td:nth-child(1)").text(); // Get product ID
+        const productName = $row.find("td:nth-child(2)").text(); // Get product Name
+        const stock = $row.find("td:nth-child(5)").text(); // Get stock value
+
+        $("#stockQuantity").val(stock);
+        $("#orderQuantity").val(0);
+        $("#orderModal").data("productId", productId); // Save product ID in modal
+        $("#orderModal").data("productName", productName); // Save product Name in modal
+        $("#orderModal").modal("show"); // Show modal
+    });
+
+    // Handle Place Order button click
+    $("#placeOrderButton").on("click", function () {
+        const orderQuantity = parseInt($("#orderQuantity").val(), 10);
+        const stockQuantity = parseInt($("#stockQuantity").val(), 10);
+        const productId = $("#orderModal").data("productId"); // Retrieve product ID from modal
+        const productName = $("#orderModal").data("productName"); // Retrieve product Name from modal
+
+        if (orderQuantity > 0 && orderQuantity <= stockQuantity) {
+            // Retrieve existing orders from sessionStorage or initialize an empty array
+            let orders = JSON.parse(sessionStorage.getItem("orders")) || [];
+
+            // Add new order details
+            orders.push({
+                id: productId,
+                name: productName,
+                quantity: orderQuantity,
+                timestamp: new Date().toLocaleString()
+            });
+
+            // Save updated orders back to sessionStorage
+            sessionStorage.setItem("orders", JSON.stringify(orders));
+
+            alert("Order placed successfully!");
+            $("#orderModal").modal("hide"); // Hide the modal
+        } else {
+            alert("Invalid order quantity! Please ensure it's less than or equal to the available stock.");
+        }
+    });
 });
