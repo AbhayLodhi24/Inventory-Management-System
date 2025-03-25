@@ -43,9 +43,6 @@ $(document).ready(function () {
     // Handle "Logout" confirmation in the modal
     $('#confirmLogout').click(function () {
         $('#logoutModal').modal('hide'); // Hide the modal
-        console.log("User has logged out."); // Log the action
-         // Notify the user (can be replaced with actual logout logic)
-        // Redirect to the login page or perform other logout actions
         window.location.href = '../Login/login.html'; // Replace with your actual login page
     });
 });
