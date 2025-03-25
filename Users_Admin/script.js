@@ -24,7 +24,7 @@ $(document).ready(function(){
         console.log("User has logged out."); // Log the action
         alert("You have been logged out."); // Notify the user (can be replaced with actual logout logic)
         // Redirect to the login page or perform other logout actions
-        window.location.href = "login.html"; // Replace with your actual login page
+        window.location.href = "../Login/login.html"; // Replace with your actual login page
     });
 
     //Search functionality
