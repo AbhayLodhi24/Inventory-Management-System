@@ -1,4 +1,37 @@
 $(document).ready(function () {
+
+    // Sidebar loading...
+    // $(".sidebar-container").on("load", function() {
+    //     "../admin_Sidebar/index.html";
+    // });
+
+    // Handle Logout functionality
+    // Populate modal with user details when the logout button is clicked
+    $('#logoutButton').click(function (e) {
+        const loginName = 'user1';
+        const loginEmail = 'user1@gmail.com';
+        e.preventDefault(); // Prevent default action for the logout link
+        $('#modalUserName').text(loginName); // Populate modal with user name
+        $('#modalUserEmail').text(loginEmail); // Populate modal with user email
+        console.log('Working');
+        // Show the logout confirmation modal
+        $('#logoutModal').modal('show');
+    });
+ 
+    // Cancel Logout Functionality
+    $('#cancelLogout').click(function () {
+        $('#logoutModal').modal('hide'); // Simply hide the modal without any further action
+    });
+ 
+    // Handle "Logout" confirmation in the modal
+    $('#confirmLogout').click(function () {
+        $('#logoutModal').modal('hide'); // Hide the modal
+        console.log("User has logged out."); // Log the action
+        alert("You have been logged out."); // Notify the user (can be replaced with actual logout logic)
+        // Redirect to the login page or perform other logout actions
+        window.location.href = "login.html"; // Replace with your actual login page
+    });
+    
     //Search functionality
     $('#search').on('keyup', function() {
         const value = $(this).val().toLowerCase();
