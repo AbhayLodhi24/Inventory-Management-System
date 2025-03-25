@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Sidebar navigation
-    $('.sidebar li').click(function() {
-    $('.sidebar li').removeClass('active');
-    $(this).addClass('active');
-    $('.content-section').hide();
-    $('#' + $(this).data('content')).show();
-    });
+   // $('.sidebar li').click(function() {
+    // $('.sidebar li').removeClass('active');
+    // $(this).addClass('active');
+    // $('.content-section').hide();
+    // $('#' + $(this).data('content')).show();
+    // });
     
     // Category and Search filter functionality  
     $('#categoryFilter').change(function() {  
@@ -76,6 +76,9 @@ $(document).ready(function() {
         }  
     });  
     
+    
+    
+
     $('#logoutButton').click(function (e) {  
         e.preventDefault();  // Prevent default action for the logout link  
         const loginName = 'user1';  
@@ -100,5 +103,4 @@ $(document).ready(function() {
         // Redirect to the login page or perform other logout actions  
         window.location.href = '../Login/login.html'; // Replace with your actual login page  
     });
-    
-    });
+});
