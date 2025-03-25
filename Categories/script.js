@@ -36,6 +36,7 @@ $(document).ready(function () {
         $("#category-name").val(category.name);
         $("#category-description").val(category.description);
         $("#edit-category-form").data("categoryId", categoryId);
+        $('#categoryModal').modal('show');
     });
 
     // Save changes to the category
@@ -50,6 +51,7 @@ $(document).ready(function () {
             category.description = newDescription; // Update the description in the array
             renderTable(); // Re-render the table
         }
+        $('#categoryModal').modal('hide');
     });
 
     // Delete button functionality
@@ -63,6 +65,7 @@ $(document).ready(function () {
     // Cancel button functionality
     $("#cancel-btn").click(function () {
         $("#edit-category-form")[0].reset();
+        $('#categoryModal').modal('hide');
     });
 
     // Search functionality
