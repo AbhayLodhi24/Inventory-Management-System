@@ -31,6 +31,9 @@ $(document).ready(function() {
             <div class="mb-3">
                 <input type="password" class="form-control" id="password" placeholder="Password">
             </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" id="password" placeholder="Confirm Password">
+            </div>
             <button type="submit" class="btn-green">Register</button>
         `);
     });
