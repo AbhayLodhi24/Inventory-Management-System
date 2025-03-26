@@ -81,8 +81,8 @@ $(document).ready(function () {
 
     $('#logoutButton').click(function (e) {  
         e.preventDefault();  // Prevent default action for the logout link  
-        const loginName = 'user1';  
-        const loginEmail = 'user1@gmail.com';  
+        const loginName = 'John Doe';  
+        const loginEmail = 'john.doe@example.com';  
         $('#modalUserName').text(loginName); // Populate modal with user name  
         $('#modalUserEmail').text(loginEmail); // Populate modal with user email  
     
