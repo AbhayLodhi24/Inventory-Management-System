@@ -61,6 +61,6 @@ $(document).ready(function () {
     // Handle "Logout" confirmation in the modal
     $('#confirmLogout').click(function () {
         $('#logoutModal').modal('hide'); // Hide the modal
-        window.location.href = "login.html"; // Replace with your actual login page
+        window.location.href = "../../Admin/Login/login.html"; // Replace with your actual login page
     });
 });

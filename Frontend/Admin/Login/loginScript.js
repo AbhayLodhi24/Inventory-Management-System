@@ -4,13 +4,17 @@ $(document).ready(function() {
             $('#username').attr('placeholder', 'Admin Username');
             $('#register-link').hide();
             $("#loginBtn").click(function(){
-                // $(this).preventDefault();
+                
                 window.location.href='../Dashboard/dashboard.html';
             });
         } else {
             $('#register-link').show();
             
             $('#username').attr('placeholder', 'Username');
+            $("form #loginBtn").click(function(){
+                
+                window.location.href='../../User/Products/products.html';
+            });
         }
     });
 
