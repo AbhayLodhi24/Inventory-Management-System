@@ -69,12 +69,19 @@ $(document).ready(function () {
     });
 
     // Search functionality
-    $("#search-input").on("keyup", function () {
-        let value = $(this).val().toLowerCase();
-        $("tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    $("#search-input").on('input', function () {
+        var searchText = $('#search-input').val().toLowerCase(); 
+        $("tbody tr").each(function() {                  
+                    var rowName = $(this).find('td:eq(1)').text().toLowerCase();  
+                    if ( searchText === '' || rowName.includes(searchText)) {  
+                $(this).show();  
+            } else {  
+                $(this).hide();  
+            }  
         });
     });
+
+    
 });
 
 
