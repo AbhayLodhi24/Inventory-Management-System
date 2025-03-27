@@ -16,8 +16,8 @@ function populateTable() {
                 <td>${supplier.phone}</td>
                 <td>${supplier.address}</td>
                 <td>
-                    <button class="btn btn-edit btn-sm" onclick="editSupplier(${supplier.id})">Edit</button>
-                    <button class="btn btn-delete btn-sm" onclick="deleteSupplier(${supplier.id})">Delete</button>
+                    <button class="btn btn-primary mr-2" style="width: 34%;" onclick="editSupplier(${supplier.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteSupplier(${supplier.id})">Delete</button>
                 </td>
             </tr>`
         );
@@ -103,8 +103,8 @@ $('#search').on('input', function () {
                 <td>${supplier.phone}</td>
                 <td>${supplier.address}</td>
                 <td>
-                    <button class="btn btn-edit btn-sm" onclick="editSupplier(${supplier.id})">Edit</button>
-                    <button class="btn btn-delete btn-sm" onclick="deleteSupplier(${supplier.id})">Delete</button>
+                    <button class="btn btn-primary mr-2" style="width: 34%;" onclick="editSupplier(${supplier.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteSupplier(${supplier.id})">Delete</button>
                 </td>
             </tr>`
         );

@@ -32,7 +32,7 @@ $(document).ready(function() {
       productName: 'Monitor',
       category: 'Electronic',
       quantity: 2,
-      totalPrice: '$1000.00',
+      totalPrice: '₹1000.00',
       orderDate: '3/18/2025'
     },
     {
@@ -42,7 +42,7 @@ $(document).ready(function() {
       productName: 'Keyboard',
       category: 'Electronic',
       quantity: 1,
-      totalPrice: '$50.00',
+      totalPrice: '₹50.00',
       orderDate: '3/20/2025'
     },
     {
@@ -52,7 +52,7 @@ $(document).ready(function() {
       productName: 'Desk',
       category: 'Furniture',
       quantity: 1,
-      totalPrice: '$200.00',
+      totalPrice: '₹200.00',
       orderDate: '3/21/2025'
     }
   ];

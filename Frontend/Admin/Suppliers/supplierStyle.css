@@ -1,90 +1,44 @@
 /* Sidebar Styling */
 .sidebar {
-    height: 100vh;
+    height: 100vh; /* Full height */
+    position: fixed; /* Fix it on the left */
+    top: 0;
+    left: 0;
     background: #212529;
-    padding: 20px;
     color: white;
+    padding: 20px;
+    overflow-y: auto; /* Allow scrolling if needed */
 }
 .sidebar h4 {
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
 }
+.nav-link {
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+    transition: 0.3s;
+}
+.nav-link:hover {
+    color: #ffc107 !important; /* Bootstrap's text-warning color */
+    background: #343a40;
+    border-radius: 5px;
+}
 .sidebar .active {
     color: #ffc107;
 }
-.nav-link {
-    color: white;
-    font-size: 16px;
-    padding: 12px;
-    transition: 0.3s;
-}
-.nav-link:hover {
-    color: #ffc107 !important; /* Using Bootstrap's text-warning color */
-    background: #343a40;
-    border-radius: 5px;
-}
 .nav-link i {
     margin-right: 10px;
 }
 
+
+/* Main content */
 .content {
-    flex-grow: 1;
+    margin-left: 18%; /* Push content to the right (same as col-3 width) */
     padding: 20px;
+    width: 80%; /* Same as col-9 width */
 }
-
-.btn-edit {
-    background-color: #ffc107;
-    color: white;
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-}
-
-.search-bar {
-    margin-bottom: 20px;
-}
-
-h2 {
-    margin-bottom: 1.5rem;
-}
-
-/* Sidebar Styling */
-.sidebar {
-    height: 100vh;
-    background: #212529;
-    padding: 20px;
-    color: white;
-}
-
-.sidebar h2 {
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.nav-link {
-    color: white;
-    font-size: 16px;
-    padding: 12px;
-    transition: 0.3s;
-}
-
-.nav-link:hover {
-    color: #ffc107 !important;
-    /* Using Bootstrap's text-warning color */
-    background: #343a40;
-    border-radius: 5px;
-}
-
-.nav-link i {
-    margin-right: 10px;
-}
-
-
-
 
 
 @media (max-width: 768px) {

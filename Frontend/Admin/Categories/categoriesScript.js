@@ -15,9 +15,10 @@ $(document).ready(function () {
             <tr data-id="${category.id}">
                 <td>${category.id}</td>
                 <td class="category-name">${category.name}</td>
+                <td class="description">${category.description}</td>
                 <td>
-                    <button class="btn btn-edit btn-sm edit-btn">Edit</button>
-                    <button class="btn btn-delete btn-sm delete-btn">Delete</button>
+                    <button class="btn btn-primary edit-btn mr-2">Edit</button>
+                    <button class="btn btn-danger delete-btn">Delete</button>
                 </td>
             </tr>
         `;
@@ -69,10 +70,15 @@ $(document).ready(function () {
     });
 
     // Search functionality
-    $("#search-input").on("keyup", function () {
-        let value = $(this).val().toLowerCase();
-        $("tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    $("#search-input").on('input', function () {
+        var searchText = $('#search-input').val().toLowerCase();
+        $("tbody tr").each(function() {                  
+            var rowName = $(this).find('td:eq(1)').text().toLowerCase();  
+            if ( searchText === '' || rowName.includes(searchText)) {  
+                $(this).show();  
+            } else {  
+                $(this).hide();  
+            }  
         });
     });
 });

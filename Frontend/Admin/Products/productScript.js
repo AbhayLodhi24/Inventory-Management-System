@@ -30,7 +30,17 @@ $(document).ready(function () {
     });
     
     //Search functionality
-    $('#search').on('keyup', function() {
+    $("#search").on('input', function () {
+        var searchText = $('#search').val().toLowerCase();
+        $("tbody tr").each(function() {                  
+            var rowName = $(this).find('td:eq(1)').text().toLowerCase();  
+            if ( searchText === '' || rowName.includes(searchText)) {  
+                $(this).show();
+            } else {
+                $(this).hide();  
+            }  
+        });
+    });$('#search').on('keyup', function() {
         const value = $(this).val().toLowerCase();
         $('tbody tr').filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
@@ -94,8 +104,8 @@ $(document).ready(function () {
                     <td class="price">₹${price}</td>
                     <td class="stock"><span class="${stockClass}">${stock}</span></td>
                     <td>
-                        <button class="btn btn-link editButton text-primary btn-no-underline">Edit</button>
-                        <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
+                        <button class="btn btn-primary editButton btn-no-underline mr-2" style="width: 40%;">Edit</button>
+                        <button class="btn btn-danger deleteButton btn-no-underline">Delete</button>
                     </td>
                 </tr>
             `;

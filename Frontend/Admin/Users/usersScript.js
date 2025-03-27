@@ -25,13 +25,17 @@ $(document).ready(function(){
     });
 
     //Search functionality
-    $('#search').on('keyup', function() {
-        const value = $(this).val().toLowerCase();
-        $('tbody tr').filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    $("#search").on('input', function () {
+        var searchText = $('#search').val().toLowerCase();
+        $("tbody tr").each(function() {                  
+            var rowName = $(this).find('td:eq(1)').text().toLowerCase();  
+            if ( searchText === '' || rowName.includes(searchText)) {  
+                $(this).show();  
+            } else {  
+                $(this).hide();  
+            }  
         });
     });
-
      //add new user button
      $('#addUserbtn').click(function(){
         $('#modal').modal('show');
@@ -68,13 +72,13 @@ $(document).ready(function(){
                 <td class="email">${email}</td>
                 <td class="role">${role}</td>
                 <td>
-                    <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
+                    <button class="btn btn-danger deleteButton">Delete</button>
                 </td>
             </tr>`;
             $('tbody').append(newRow);
 
             // Clear form inputs
-            $("#userForm")[0].reset();
+            $('#modal').modal('hide');
         }
     });
 
