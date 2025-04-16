@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+		<div  th:fragment="logoutModal"
+		class="modal fade" id="logoutModal" tabindex="-1"
+				aria-labelledby="logoutModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+						</div>
+						<div class="modal-body">
+							<p>Are you sure you want to logout?</p>
+							<p>
+								<strong>Name:</strong> <span id="modalUserName"></span>
+							</p>
+							<p>
+								<strong>Email:</strong> <span id="modalUserEmail"></span>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" id="cancelLogout" class="btn btn-secondary"
+								data-bs-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-danger" id="confirmLogout">OK</button>
+						</div>
+					</div>
+				</div>
+			</div>
+</body>
+</html>
