@@ -40,6 +40,8 @@
     width: 75%; /* Same as col-9 width */
 }
 
-.btn-no-underline{
-    text-decoration: none !important;
+.modal-dialog {
+    max-width: 400px; /* Adjust the width as needed */
+    margin: 1.75rem auto; /* Adjust the margin as needed */
+    height: 20%;
 }
