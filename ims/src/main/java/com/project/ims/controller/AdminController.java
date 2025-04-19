@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.ims.Model.Products;
-import com.project.ims.Repository.ProductRepository;
+import com.project.ims.Service.ProductService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 	
 	@Autowired
-	ProductRepository productRepository;
+	private ProductService productService;
 	
 	@GetMapping("/dashboard")
 	public String getDashboardPage(Model model) {
@@ -32,7 +32,7 @@ public class AdminController {
 	
 	@GetMapping("/product")
 	public String getProductPage(Model model) {
-		List<Products> products = productRepository.findAll();
+		List<Products> products = productService.getAllProducts();
         model.addAttribute("products", products);
 		return "/Frontend/Admin/Products/product";
 	}

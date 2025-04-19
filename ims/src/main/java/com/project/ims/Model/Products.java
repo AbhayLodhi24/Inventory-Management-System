@@ -107,14 +107,7 @@ public class Products {
     @ManyToOne
     @JoinColumn(name = "SUPPLIER_ID", referencedColumnName = "SUPPLIER_ID", nullable = false, insertable = false, updatable = false)
     private Supplier supplier;
-  
-  
-    @Override
-    public String toString() {
-        return "Products [productId=" + productId + ", name=" + name + ", price=" + price + ", stock=" + stock
-                + ", category=" + (category != null ? category.getCategoryName() : null) +
-                ", supplier=" + (supplier != null ? supplier.getSupplierName() : null) + "]";
-    }
+
 
   
 }

@@ -10,8 +10,10 @@
     text-align: center;
     margin-bottom: 30px;
 }
-.sidebar .active {
-    color: #ffc107;
+.sidebar .nav-item .active {
+    color: #ffc107 !important; /* Use !important to ensure precedence */
+    background: #343a40; /* Keep the background style if you want */
+    border-radius: 5px; /* Keep the border-radius if you want */
 }
 .nav-link {
     color: white;

@@ -2,28 +2,10 @@ body {
     background-color: #f8f9fa;
 }
 
-.sidebar {
-    height: 100vh;
-    background-color: #343a40;
-    color: white;
-}
-
-.sidebar a {
-    color: #adb5bd;
-}
-
-.sidebar a:hover {
-    background-color: #495057;
-    color: white;
-}
-
-.sidebar .active {
-    color: #ffc107;
-}
-
 .w-50 {
     width: 50%;
 }
+
 
 /* Sidebar Styling */
 .sidebar {
@@ -39,6 +21,9 @@ body {
     margin-bottom: 30px;
 }
 
+.sidebar .active {
+    color: #ffc107;
+}
 
 .nav-link {
     color: white;
