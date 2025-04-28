@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.project.ims.Model.Supplier;
 import com.project.ims.Repository.SupplierRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class SupplierService {
 	
@@ -39,12 +41,33 @@ public class SupplierService {
 	    }
 		
 		public Optional<Supplier> getSupplierById(int id) {
+			System.out.println(id);
 	        return supplierRepository.findById(id);
+	        
 	    }
 
-	    // Method to update an existing supplier
-	    public Supplier updateSupplier(Supplier updatedSupplier) {
-	        return supplierRepository.save(updatedSupplier);
+		@Transactional
+	    public void updateSupplier(SupplierDto supplierDto) {
+	        Optional<Supplier> existingSupplierOptional = supplierRepository.findById(supplierDto.getSupplierId());
+
+	        if (!existingSupplierOptional.isPresent()) {
+	            throw new IllegalArgumentException("Supplier not found with ID: " + supplierDto.getSupplierId());
+	        }
+
+	        Supplier existingSupplier = existingSupplierOptional.get();
+
+	        // Check for duplicate name, excluding the current supplier being updated
+	        Supplier existingNameSupplier = supplierRepository.findBySupplierName(supplierDto.getSupplierName());
+	        if (existingNameSupplier != null && !existingNameSupplier.getSupplierId().equals(supplierDto.getSupplierId())) {
+	            throw new DataIntegrityViolationException("Supplier with this name already exists.");
+	        }
+
+	        existingSupplier.setSupplierName(supplierDto.getSupplierName());
+	        existingSupplier.setContactPerson(supplierDto.getContactPerson());
+	        existingSupplier.setEmail(supplierDto.getEmail());
+	        existingSupplier.setPhone(supplierDto.getPhone());
+
+	        supplierRepository.save(existingSupplier);
 	    }
 				
 }

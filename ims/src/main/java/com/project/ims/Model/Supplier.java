@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Scope;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,7 +45,8 @@ public class Supplier {
 
     @Column(name="address")
     private String supplierAddr;	
-	@OneToMany(mappedBy = "supplier")
+    
+	@OneToMany(mappedBy = "supplier", cascade = CascadeType.REMOVE)
     private List<Products> products;
 	
 	public Integer getSupplierId() {
@@ -86,7 +88,8 @@ public class Supplier {
 	public void setSupplierAddr(String supplierAddr) {
 		this.supplierAddr = supplierAddr;
 	}
-
+	
+	
 	public List<Products> getProducts() {
         return products;
     }

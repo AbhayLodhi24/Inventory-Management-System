@@ -147,7 +147,7 @@
                     <div class="modal-content">
                         <div th:fragment="editSupplierModalContent">
                             <form id="editSupplierForm" th:action="@{/admin/suppliers/edit/{id}(id=${supp.supplierId})}" method="post"
-                                  th:object="${supp}">
+      							th:object="${supp}">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="editSupplierModalLabel">Edit Supplier</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -185,7 +185,7 @@
                                         <label for="editSupplierAddr" class="form-label">Address</label>
                                         <input type="text" class="form-control" id="editSupplierAddr"
                                                th:field="*{supplierAddr}" required>
-                                        <div class="text-danger" id="editSupplierAddrError"
+                                        <div class="text-da	nger" id="editSupplierAddrError"
                                              th:if="${#fields.hasErrors('supplierAddr')}" th:errors="*{supplierAddr}"></div>
                                     </div>
                                     <div class="text-danger" th:if="${editGeneralError}" th:text="${editGeneralError}"></div>

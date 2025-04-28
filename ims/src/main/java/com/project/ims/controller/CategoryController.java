@@ -37,7 +37,7 @@ public class CategoryController {
         model.addAttribute("totalItems", categoryPage.getTotalElements());
         model.addAttribute("query", query);
         model.addAttribute("cat", new CategoryDto()); // For the add/edit modal form
-        return "Frontend/Admin/Category";
+        return "Frontend/Admin/Categories/categories";
     }
 
     @PostMapping("/addCategory")
@@ -45,17 +45,17 @@ public class CategoryController {
                               BindingResult bindingResult,
                               Model model) {
         if (bindingResult.hasErrors()) {
-            return "Frontend/Admin/Category :: addCategoryModalContent";
+            return "Frontend/Admin/Categories/categories :: addCategoryModalContent";
         }
         Category category = new Category();
         category.setCategoryName(categoryDTO.getCategoryName());
-        category.setCategory_description(categoryDTO.getCategoryDescription());
+        category.setCategoryDescription(categoryDTO.getCategoryDescription());
         try {
             categoryService.saveCategory(category);
             return "redirect:/admin/categories?message=Category added successfully";
         } catch (DataIntegrityViolationException e) {
             model.addAttribute("nameError", "Category with this name already exists!");
-            return "Frontend/Admin/Category :: addCategoryModalContent";
+            return "Frontend/Admin/Categories/categories :: addCategoryModalContent";
         }
     }
 
@@ -76,7 +76,7 @@ public class CategoryController {
                                  BindingResult bindingResult,
                                  Model model) {
         if (bindingResult.hasErrors()) {
-            return "Frontend/Admin/Category :: editCategoryModalContent";
+            return "Frontend/Admin/Categories/categories :: editCategoryModalContent";
         }
         Optional<Category> existingCategoryOptional = categoryService.getCategoryById(id);
         if (!existingCategoryOptional.isPresent()) {
@@ -84,13 +84,13 @@ public class CategoryController {
         }
         Category existingCategory = existingCategoryOptional.get();
         existingCategory.setCategoryName(categoryDTO.getCategoryName());
-        existingCategory.setCategory_description(categoryDTO.getCategoryDescription());
+        existingCategory.setCategoryDescription(categoryDTO.getCategoryDescription());
         try {
             categoryService.updateCategory(existingCategory);
             return "redirect:/admin/categories?message=Category updated successfully";
         } catch (DataIntegrityViolationException e) {
             model.addAttribute("editNameError", "Category with this name already exists!");
-            return "Frontend/Admin/Category :: editCategoryModalContent";
+            return "Frontend/Admin/Categories/categories :: editCategoryModalContent";
         }
     }
 }

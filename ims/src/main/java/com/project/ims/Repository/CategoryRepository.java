@@ -16,7 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query("SELECT c FROM Category c WHERE " +
             "LOWER(c.categoryName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(c.category_description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+            "LOWER(c.categoryDescription) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Category> searchCategories(@Param("keyword") String keyword);
 
     default Page<Category> searchCategoriesWithPagination(String searchTerm, Pageable pageable) {

@@ -1,106 +1,187 @@
 $(document).ready(function() {
-    const supplierModal = new bootstrap.Modal($('#SupplierModal'));
-    const addSupplierBtn = $('#addSupplierBtn');
-    const supplierForm = $('#supplierForm'); // Select the form inside the modal
-    const editSupplierModal = new bootstrap.Modal($('#editSupplierModal'));
-    const editSupplierForm = $('#editSupplierModal form');
+    const addSupplierModal = $('#addSupplierModal');
+    const addSupplierForm = $('#addSupplierForm');
+    const addSupplierModalLabel = $('#addSupplierModalLabel');
+    const editSupplierModalLabel = $('#editSupplierModalLabel');
+    const supplierIdInput = $('#supplierId');
 
-    // Open the add supplier modal
-    addSupplierBtn.on('click', function() {
-        $('#supplierModalLabel').text('Add Supplier');
-        $('#modalSubmitBtn').text('Add Supplier');
-        supplierForm[0].reset(); // Clear the form fields
-        $('#SupplierModal .text-danger').empty(); // Clear any previous error messages
-        supplierModal.show();
+    function updateSupplierErrorDisplay(fieldId, errorMessage) {
+        const inputElement = $('#' + fieldId);
+        if (errorMessage) {
+            inputElement.addClass('is-invalid');
+            alert(errorMessage);
+        } else {
+            inputElement.removeClass('is-invalid');
+        }
+    }
+
+    addSupplierForm.submit(function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        let shouldSubmit = true; // Flag to control submission
+
+        // Client-side validation based on SupplierDto constraints
+        if ($('#supplierName').val().trim() === "") {
+            updateSupplierErrorDisplay('supplierName', 'Supplier name is required.');
+            shouldSubmit = false;
+        } else if ($('#supplierName').val().trim().length > 50) {
+            updateSupplierErrorDisplay('supplierName', 'Supplier name cannot exceed 50 characters.');
+            shouldSubmit = false;
+        } else if ($('#supplierName').val().trim().length < 3) {
+            updateSupplierErrorDisplay('supplierName', 'Supplier name must be at least 3 characters.');
+            shouldSubmit = false;
+        } else {
+            updateSupplierErrorDisplay('supplierName', '');
+        }
+
+        const emailValue = $('#supplierEmail').val().trim();
+        if (emailValue === "") {
+            updateSupplierErrorDisplay('supplierEmail', 'Supplier email is required.');
+            shouldSubmit = false;
+        } else if (!isValidEmail(emailValue)) {
+            updateSupplierErrorDisplay('supplierEmail', 'Invalid email format.');
+            shouldSubmit = false;
+        } else {
+            updateSupplierErrorDisplay('supplierEmail', '');
+        }
+
+        const phoneValue = $('#supplierPhno').val().trim();
+        if (phoneValue === "") {
+            updateSupplierErrorDisplay('supplierPhno', 'Phone number is required.');
+            shouldSubmit = false;
+        } else if (!/^[0-9]{10}$/.test(phoneValue)) {
+            updateSupplierErrorDisplay('supplierPhno', 'Phone number must be exactly 10 digits.');
+            shouldSubmit = false;
+        } else {
+            updateSupplierErrorDisplay('supplierPhno', '');
+        }
+
+        if ($('#supplierAddr').val().trim() === "") {
+            updateSupplierErrorDisplay('supplierAddr', 'Address is required.');
+            shouldSubmit = false;
+        } else if ($('#supplierAddr').val().trim().length < 5) {
+            updateSupplierErrorDisplay('supplierAddr', 'Address must be at least 5 characters.');
+            shouldSubmit = false;
+        } else if ($('#supplierAddr').val().trim().length > 100) {
+            updateSupplierErrorDisplay('supplierAddr', 'Address cannot exceed 100 characters.');
+            shouldSubmit = false;
+        } else {
+            updateSupplierErrorDisplay('supplierAddr', '');
+        }
+
+        if (shouldSubmit) {
+            const formData = $(this).serialize();
+            const supplierId = supplierIdInput.val();
+            const supplierName = $('#supplierName').val().trim();
+            const supplierEmail = $('#supplierEmail').val().trim();
+            const supplierPhno = $('#supplierPhno').val().trim();
+            const supplierAddr = $('#supplierAddr').val().trim();
+
+            let isDuplicateSupplier = false;
+            if (typeof existingSupplierDetails !== 'undefined') {
+                for (const supplier of existingSupplierDetails) {
+                    if (supplier.supplierName === supplierName &&
+                        supplier.supplierEmail === supplierEmail &&
+                        supplier.supplierPhno === supplierPhno &&
+                        supplier.supplierAddr === supplierAddr &&
+                        parseInt(supplier.supplierId) !== parseInt(supplierIdInput.val())) { // Exclude the current supplier being edited
+                        isDuplicateSupplier = true;
+                        break;
+                    }
+                }
+            }
+
+            if (isDuplicateSupplier) {
+                alert("A supplier with the same details (name, email, phone, address) already exists. You can't save this supplier.");
+            } else {
+                const actionUrl = supplierId === '0' ? '/admin/suppliers/addSupplier' : '/admin/suppliers/editSupplier';
+                addSupplierForm.attr('action', actionUrl);
+                submitSupplierFormData(formData, actionUrl);
+            }
+        }
     });
 
-    // Handle the add supplier form submission
-    supplierForm.on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+    function isValidEmail(email) {
+        // Basic email validation regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 
-        const form = $(this);
+    function submitSupplierFormData(formData, url) {
         $.ajax({
-            type: form.attr('method'),
-            url: form.attr('action'),
-            data: form.serialize(),
+            url: url,
+            type: 'POST',
+            data: formData,
             success: function(response) {
-                if ($(response).find('.text-danger').length > 0 || $(response).find('#emailError').length > 0 || $(response).find('#generalError').length > 0) {
-                    // If there are validation errors in the response, update the modal content
-                    $('#SupplierModal .modal-content').html(response);
-                    supplierModal.show(); // Ensure the modal is shown
-                } else {
-                    // If no errors, show success message and reload the supplier table
-                    alert('Supplier added successfully');
-                    supplierModal.hide();
-                    resetSupplierForm();
-                    // Reload the supplier table fragment
-                    $.get('/admin/suppliers .content > div', function(newContent) {
-                        $('.content > div').html(newContent);
-                    });
-                }
+                addSupplierModal.modal('hide');
+                window.location.reload();
             },
             error: function(xhr, status, error) {
-                alert('Error adding supplier: ' + error);
+                handleSupplierServerError(xhr);
             }
         });
-    });
+    }
 
-    // Open the edit supplier modal and populate data
-    $(document).on('click', '#editSupplierBtn', function() {
-        $('#editSupplierModalLabel').text("Edit Supplier");
-        editSupplierModal.show();
-        const supplierId = $(this).data('id');
-        const name = $(this).data('name');
-        const email = $(this).data('email');
-        const phone = $(this).data('phone');
-        const address = $(this).data('address');
+    let existingSupplierDetails = []; // Store fetched existing supplier details
 
-        $('#editSupplierModal #editSupplierId').val(supplierId);
-        $('#editSupplierModal #editSupplierName').val(name);
-        $('#editSupplierModal #editSupplierEmail').val(email);
-        $('#editSupplierModal #editSupplierPhno').val(phone);
-        $('#editSupplierModal #editSupplierAddr').val(address);
-        $('#editSupplierModal .text-danger').empty(); // Clear any previous error messages
-    });
-
-    // Handle the edit supplier form submission
-    editSupplierForm.on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        const form = $(this);
-        $.ajax({
-            type: form.attr('method'),
-            url: form.attr('action').replace('{id}', $('#editSupplierId').val()), // Include the ID in the URL
-            data: form.serialize(),
-            success: function(response) {
-                if ($(response).find('.text-danger').length > 0 || $(response).find('#editEmailError').length > 0 || $(response).find('#editGeneralError').length > 0) {
-                    // If there are validation errors in the response, update the modal content
-                    $('#editSupplierModal .modal-content').html(response);
-                    editSupplierModal.show(); // Ensure the modal is shown
-                } else {
-                    // If no errors, show success message and reload the supplier table
-                    alert('Supplier updated successfully');
-                    editSupplierModal.hide();
-                    resetEditSupplierForm();
-                    // Reload the supplier table fragment
-                    $.get('/admin/suppliers .content > div', function(newContent) {
-                        $('.content > div').html(newContent);
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Error updating supplier: ' + error);
-            }
+    function fetchExistingSupplierDetails() {
+        return $.ajax({
+            url: '/admin/suppliers/existingDetails', // Endpoint to get existing supplier details
+            type: 'GET'
         });
+    }
+
+    addSupplierModal.on('show.bs.modal', function() {
+        fetchExistingSupplierDetails().done(function(data) {
+            existingSupplierDetails = data;
+        }).fail(function(error) {
+            console.error("Error fetching existing supplier details:", error);
+        });
+
+        addSupplierForm.find('.is-invalid').removeClass('is-invalid');
+    });
+
+    $('.edit-supplier-btn').on('click', function() {
+        const supplierId = $(this).data('supplier-id');
+        const supplierName = $(this).data('supplier-name');
+        const supplierEmail = $(this).data('supplier-email');
+        const supplierPhno = $(this).data('supplier-phno');
+        const supplierAddr = $(this).data('supplier-addr');
+
+        addSupplierModalLabel.addClass('d-none'); // Hide "Add New Supplier" title
+        editSupplierModalLabel.removeClass('d-none'); // Show "Edit Supplier" title
+
+        supplierIdInput.val(supplierId);
+        $('#supplierName').val(supplierName);
+        $('#supplierEmail').val(supplierEmail);
+        $('#supplierPhno').val(supplierPhno);
+        $('#supplierAddr').val(supplierAddr);
+    });
+
+    function handleSupplierServerError(xhr) {
+        if (xhr.status === 400) {
+            const tempDiv = $('<div>').html(xhr.responseText);
+            $('#supplierName').val(tempDiv.find('#supplierName').val());
+            $('#supplierEmail').val(tempDiv.find('#supplierEmail').val());
+            $('#supplierPhno').val(tempDiv.find('#supplierPhno').val());
+            $('#supplierAddr').val(tempDiv.find('#supplierAddr').val());
+            const generalError = tempDiv.find('.alert.alert-danger');
+            if (generalError.length) {
+                alert(generalError.text());
+            }
+            // Keep the modal open
+        } else {
+            alert("An error occurred while adding/editing the supplier.");
+            console.error("Error adding/editing supplier:", error);
+        }
+    }
+
+    addSupplierModal.on('hidden.bs.modal', function () {
+        addSupplierModalLabel.removeClass('d-none');
+        editSupplierModalLabel.addClass('d-none');
+        addSupplierForm[0].reset();
+        addSupplierForm.find('.is-invalid').removeClass('is-invalid');
+        supplierIdInput.val(0);
+        addSupplierForm.attr('action', '/admin/suppliers/addSupplier');
     });
 });
-
-function resetSupplierForm() {
-    $('#supplierModal form')[0].reset();
-    $('#SupplierModal .text-danger').empty(); // Clear any error messages on reset
-}
-
-function resetEditSupplierForm() {
-    $('#editSupplierModal form')[0].reset();
-    $('#editSupplierModal .text-danger').empty(); // Clear any error messages on reset
-}

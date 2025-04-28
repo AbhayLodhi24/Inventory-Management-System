@@ -101,7 +101,7 @@ public class Products {
 
 
 	@ManyToOne
-    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", nullable = true, insertable = false, updatable = false)
     private Category category;
 
     @ManyToOne

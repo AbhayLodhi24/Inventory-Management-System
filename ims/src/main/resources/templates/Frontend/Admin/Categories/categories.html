@@ -49,13 +49,13 @@
                     <tr th:each="category : ${categoriesList}">
                         <td th:text="${category.categoryId}"></td>
                         <td th:text="${category.categoryName}"></td>
-                        <td th:text="${category.description}"></td>
+                        <td th:text="${category.categoryDescription}"></td>
                         <td class="d-flex gap-2">
                             <button id="editCategoryBtn"
                                     class="btn btn-outline-primary btn edit-btn"
                                     th:data-id="${category.categoryId}"
                                     th:data-name="${category.categoryName}"
-                                    th:data-description="${category.description}">
+                                    th:data-description="${category.categoryDescription}">
                                 Edit
                             </button>
                             <a th:href="@{/admin/categories/delete/{id}(id=${category.categoryId})}"
@@ -101,9 +101,9 @@
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
                                         <textarea class="form-control" id="description"
-                                                  th:field="*{description}"></textarea>
+                                                  th:field="*{categoryDescription}"></textarea>
                                         <div class="text-danger" id="descriptionError"
-                                             th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                                             th:if="${#fields.hasErrors('categoryDescription')}" th:errors="*{categoryDescription}"></div>
                                     </div>
                                     <div class="text-danger" th:if="${generalError}" th:text="${generalError}"></div>
                                 </div>
@@ -144,9 +144,9 @@
                                     <div class="mb-3">
                                         <label for="editDescription" class="form-label">Description</label>
                                         <textarea class="form-control" id="editDescription"
-                                                  th:field="*{description}"></textarea>
+                                                  th:field="*{categoryDescription}"></textarea>
                                         <div class="text-danger" id="editDescriptionError"
-                                             th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                                             th:if="${#fields.hasErrors('categoryDescription')}" th:errors="*{categoryDescription}"></div>
                                     </div>
                                     <div class="text-danger" th:if="${editGeneralError}" th:text="${editGeneralError}"></div>
                                 </div>

@@ -87,8 +87,10 @@ public class SupplierController {
         }
 
         Optional<Supplier> existingSupplierOptional = supplierService.getSupplierById(id);
+        System.out.println(supplierService.getSupplierById(id));
         if (!existingSupplierOptional.isPresent()) {
-            return "redirect:/admin/suppliers?error=Supplier not found";
+            model.addAttribute("editGeneralError", "Supplier not found.");
+            return "Frontend/Admin/Supplier :: editSupplierModalContent";
         }
 
         Supplier existingSupplier = existingSupplierOptional.get();
@@ -97,9 +99,9 @@ public class SupplierController {
         existingSupplier.setSupplierPhno(supplierDTO.getSupplierPhno());
         existingSupplier.setSupplierAddr(supplierDTO.getSupplierAddr());
 
-
         try {
             supplierService.updateSupplier(existingSupplier);
+            model.addAttribute("message", "Supplier updated successfully"); // Optional: Pass success message to the page
             return "redirect:/admin/suppliers?message=Supplier updated successfully";
         } catch (DataIntegrityViolationException e) {
             supplierDTO.setSupplierId(id); // Ensure ID is retained
@@ -110,6 +112,11 @@ public class SupplierController {
                 model.addAttribute("editGeneralError", "An error occurred while updating the supplier.");
             }
             return "Frontend/Admin/Supplier :: editSupplierModalContent"; // Return edit modal fragment with errors
+        } catch (Exception e) {
+            supplierDTO.setSupplierId(id); // Ensure ID is retained
+            model.addAttribute("supp", supplierDTO);
+            model.addAttribute("editGeneralError", "An unexpected error occurred: " + e.getMessage());
+            return "Frontend/Admin/Supplier :: editSupplierModalContent";
         }
     }
 
