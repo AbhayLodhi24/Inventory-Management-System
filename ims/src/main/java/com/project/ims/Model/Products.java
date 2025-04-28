@@ -109,12 +109,6 @@ public class Products {
     private Supplier supplier;
   
   
-    @Override
-    public String toString() {
-        return "Products [productId=" + productId + ", name=" + name + ", price=" + price + ", stock=" + stock
-                + ", category=" + (category != null ? category.getCategoryName() : null) +
-                ", supplier=" + (supplier != null ? supplier.getSupplierName() : null) + "]";
-    }
 
   
 }

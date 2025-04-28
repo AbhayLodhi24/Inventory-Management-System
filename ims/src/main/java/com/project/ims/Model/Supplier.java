@@ -3,8 +3,7 @@ package com.project.ims.Model;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
- 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,14 +12,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Data;
  
  
-@Component
 @Entity
-@Table(name="suppliers")
+@Data
+@Table(name="suppliers", uniqueConstraints = {@UniqueConstraint(columnNames = {"supplier_email"})})
 @Scope("prototype")
 public class Supplier {
-	
+						
 	@Id
 	@Column(name="supplier_id")
 	@SequenceGenerator(
@@ -30,24 +31,28 @@ public class Supplier {
 	    )
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_seq")
 	private Integer supplierId;
-	
-	@Column(name="supplier_name")
-	private String supplierName;
-	
-	@Column(name="supplier_email")
-	private String supplier_email;
-	
-	@Column(name="supplier_phone_number")
-	private String supplier_phno;
-	
-	@Column(name="address")	
-	private String supplier_addr;
-	
+		
+    @Column(name="supplier_name")
+    private String supplierName;
+
+    @Column(name="supplier_email")
+    private String supplierEmail;
+
+
+    @Column(name="supplier_phone_number")
+    private String supplierPhno;
+
+    @Column(name="address")
+    private String supplierAddr;	
 	@OneToMany(mappedBy = "supplier")
     private List<Products> products;
 	
 	public Integer getSupplierId() {
 		return supplierId;
+	}
+	
+	public void setSupperId(Integer supplierId) {
+		this.supplierId = supplierId;
 	}
  
 	public String getSupplierName() {
@@ -58,30 +63,30 @@ public class Supplier {
 		this.supplierName = supplierName;
 	}
  
-	public String getSupplier_email() {
-		return supplier_email;
+	public String getSupplierEmail() {
+		return supplierEmail;
 	}
- 
-	public void setSupplier_email(String supplier_email) {
-		this.supplier_email = supplier_email;
+
+	public void setSupplierEmail(String supplierEmail) {
+		this.supplierEmail = supplierEmail;
 	}
- 
-	public String getSupplier_phno() {
-		return supplier_phno;
+
+	public String getSupplierPhno() {
+		return supplierPhno;
 	}
- 
-	public void setSupplier_phno(String supplier_phno) {
-		this.supplier_phno = supplier_phno;
+
+	public void setSupplierPhno(String supplierPhno) {
+		this.supplierPhno = supplierPhno;
 	}
- 
-	public String getSupplier_addr() {
-		return supplier_addr;
+
+	public String getSupplierAddr() {
+		return supplierAddr;
 	}
- 
-	public void setSupplier_addr(String supplier_addr) {
-		this.supplier_addr = supplier_addr;
+
+	public void setSupplierAddr(String supplierAddr) {
+		this.supplierAddr = supplierAddr;
 	}
-	
+
 	public List<Products> getProducts() {
         return products;
     }
@@ -89,5 +94,7 @@ public class Supplier {
     public void setProducts(List<Products> products) {
         this.products = products;
     }
+    
+
  
 }

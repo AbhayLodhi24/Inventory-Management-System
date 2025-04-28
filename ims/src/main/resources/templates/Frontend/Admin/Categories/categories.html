@@ -1,127 +1,172 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inventory Management System</title>
-    <!-- Bootstrap 5 CDN -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" th:href="@{/Css/categoriesStyle.css}" />
-  </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <body>
-    <!-- Sidebar -->
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Sidebar -->
-       			<div th:replace="~{Frontend/Admin/Common/Sidebar :: navbar}"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/Css/categoriesStyle.css}">
+</head>
 
+<body class="bg-light p-4">
+    <div th:replace="~{Frontend/Admin/Common/Sidebar :: navbar}"></div>
+    <div th:replace="~{Frontend/Admin/Common/LogoutModel :: logoutModal}"></div>
 
-      <!-- Logout Modal  -->
-		<div th:replace="~{Frontend/Admin/Common/LogoutModel :: logoutModal}"></div>
+    <main class="col-md-9 col-lg-10 content bg-light">
+        <div>
+            <h3 class="fs-1 fw-bolder mb-4">Category Management</h3>
 
-        <!-- Main Content -->
-        <main class="col-md-9 col-lg-10 content bg-light">
-          <div class="content">
-            <h2><b>Category Management</b></h2>
-            <div class="d-flex">
-              <!-- Category Management Form -->
-              <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="categoryModalLabel">Edit Category</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                              <form id="edit-category-form">
-                                <div class="mb-3">
-                                  <label for="category-name" class="form-label"
-                                    >Category Name</label
-                                  >
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    id="category-name"
-                                    value=""
-                                  />
+            <div class="row search-bar mb-4 align-items-center">
+                <div class="col-md-10">
+                    <form th:action="@{/admin/categories}" method="get" class="form-inline ">
+                        <div class="input-group w-100">
+                            <input type="text" id="search" class="form-control" name="query" th:value="${query}"
+                                   placeholder="Search categories...">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" id="addCategoryBtn">Add Category</button>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody th:fragment="categoryTable">
+                    <tr th:each="category : ${categoriesList}">
+                        <td th:text="${category.categoryId}"></td>
+                        <td th:text="${category.categoryName}"></td>
+                        <td th:text="${category.description}"></td>
+                        <td class="d-flex gap-2">
+                            <button id="editCategoryBtn"
+                                    class="btn btn-outline-primary btn edit-btn"
+                                    th:data-id="${category.categoryId}"
+                                    th:data-name="${category.categoryName}"
+                                    th:data-description="${category.description}">
+                                Edit
+                            </button>
+                            <a th:href="@{/admin/categories/delete/{id}(id=${category.categoryId})}"
+                               onclick="return confirm('Are you sure you want to delete this category?');"
+                               class="btn btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Category pagination" class="pagination-fixed-bottom">
+                <ul class="pagination justify-content-center ">
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active' : ''"
+                        class="page-item">
+                        <a class="page-link" th:href="@{/admin/categories(query=${query}, page=${i}, size=${5})}"
+                           th:text="${i + 1}"></a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="modal fade" id="CategoryModal" tabindex="-1" aria-labelledby="categoryModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div th:fragment="addCategoryModalContent">
+                            <form id="categoryForm" th:action="@{/admin/categories/addCategory}" method="post"
+                                  th:object="${cat}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="categoryModalLabel">Add Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close" onclick="resetCategoryForm()">
+                                    </button>
                                 </div>
-                                <div class="mb-3">
-                                  <label for="category-description" class="form-label"
-                                    >Description</label
-                                  >
-                                  <!--                <input type="text-box" class="form-control" id="category-description" value="">-->
-                                  <textarea
-                                    id="category-description"
-                                    class="form-control"
-                                    value=""
-                                  >
-                                  </textarea>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="categoryName" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="categoryName"
+                                               th:field="*{categoryName}" required>
+                                        <div class="text-danger" id="categoryNameError"
+                                             th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description"
+                                                  th:field="*{description}"></textarea>
+                                        <div class="text-danger" id="descriptionError"
+                                             th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                                    </div>
+                                    <div class="text-danger" th:if="${generalError}" th:text="${generalError}"></div>
                                 </div>
-                                <button type="submit" class="btn btn-success">
-                                  Save Changes
-                                </button>
-                                <button
-                                  type="button"
-                                  class="btn btn-secondary"
-                                  id="cancel-btn"
-                                >
-                                  Cancel
-                                </button>
-                              </form>
-                            </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="resetCategoryForm()">Close</button>
+                                    <button type="submit" class="btn btn-primary" id="modalSubmitBtn">Add Category</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-              <!-- Categories Table -->
-              <div class="flex-grow-1">
-                <!-- Search Bar -->
-                <div class="search-bar">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="search-input"
-                    placeholder="Search categories..."
-                  />
-                </div>
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Table rows will be dynamically rendered -->
-                  </tbody>
-                </table>
-              </div>
             </div>
-          </div>
-        </main>
-      </div>
-    </div>
 
-    <!-- Main Content -->
+            <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div th:fragment="editCategoryModalContent">
+                            <form id="editCategoryForm" th:action="@{/admin/categories/edit/{id}(id=${cat.categoryId})}" method="post"
+                                  th:object="${cat}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close" onclick="resetEditCategoryForm()">
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" th:field="*{categoryId}" id="editCategoryId">
+                                    <div class="mb-3">
+                                        <label for="editCategoryName" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="editCategoryName"
+                                               th:field="*{categoryName}" required>
+                                        <div class="text-danger" id="editCategoryNameError"
+                                             th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}"></div>
+                                    </div>
 
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+                                    <div class="mb-3">
+                                        <label for="editDescription" class="form-label">Description</label>
+                                        <textarea class="form-control" id="editDescription"
+                                                  th:field="*{description}"></textarea>
+                                        <div class="text-danger" id="editDescriptionError"
+                                             th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                                    </div>
+                                    <div class="text-danger" th:if="${editGeneralError}" th:text="${editGeneralError}"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="resetEditCategoryForm()">Close</button>
+                                    <button type="submit" class="btn btn-primary" id="editModalSubmitBtn">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- jQuery Script -->
-    <script th:src="@{/JS/categoriesScript.js}"></script>
-    <script th:src="@{/JS/adminLogoutScript.js}"></script>
-  </body>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/JS/categoryScript.js}"></script>
+</body>
+
 </html>
