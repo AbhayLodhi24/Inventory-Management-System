@@ -1,145 +1,110 @@
-var suppliers = [
-    { id: 1, name: "AGC", email: "agc@gmail.com", phone: "88827837778", address: "Main Street" },
-    { id: 2, name: "B Group", email: "info@bgroup.com", phone: "778777387", address: "Main Street" },
-    { id: 3, name: "HP Group", email: "info@hpgroup.com", phone: "333333343", address: "Main Street" }
-];
+$(document).ready(function() {
+    const supplierModal = new bootstrap.Modal($('#SupplierModal'));
+    const addSupplierBtn = $('#addSupplierBtn');
+    const supplierForm = $('#supplierForm'); // Select the form inside the modal
+    const editSupplierModal = new bootstrap.Modal($('#editSupplierModal'));
+    const editSupplierForm = $('#editSupplierModal form');
 
-function populateTable() {
-    var tableBody = $('#supplierTable');
-    tableBody.empty();
-    suppliers.forEach(function (supplier) {
-        tableBody.append(
-            `<tr>
-                <td>${supplier.id}</td>
-                <td>${supplier.name}</td>
-                <td>${supplier.email}</td>
-                <td>${supplier.phone}</td>
-                <td>${supplier.address}</td>
-                <td>
-                    <button class="btn btn-edit btn-sm" onclick="editSupplier(${supplier.id})">Edit</button>
-                    <button class="btn btn-delete btn-sm" onclick="deleteSupplier(${supplier.id})">Delete</button>
-                </td>
-            </tr>`
-        );
+    // Open the add supplier modal
+    addSupplierBtn.on('click', function() {
+        $('#supplierModalLabel').text('Add Supplier');
+        $('#modalSubmitBtn').text('Add Supplier');
+        supplierForm[0].reset(); // Clear the form fields
+        $('#SupplierModal .text-danger').empty(); // Clear any previous error messages
+        supplierModal.show();
     });
-}
 
-function editSupplier(id) {
-    var supplier = suppliers.find(supplier => supplier.id === id);
-    if (supplier) {
-        $('#supplierID').val(supplier.id);
-        $('#supplierName').val(supplier.name);
-        $('#supplierEmail').val(supplier.email);
-        $('#supplierPhone').val(supplier.phone);
-        $('#supplierAddress').val(supplier.address);
-        $('#supplierModalLabel').text("Edit Supplier");
-        $('#modalSubmitBtn').text("Save changes");
-        $('#supplierModal').modal('show');
-    }
-}
+    // Handle the add supplier form submission
+    supplierForm.on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
-function deleteSupplier(id) {
-    suppliers = suppliers.filter(supplier => supplier.id !== id);
-    populateTable();
-}
-
-$('#supplierForm').on('submit', function (e) {
-    e.preventDefault();
-    var id = $('#supplierID').val();
-    var name = $('#supplierName').val();
-    var email = $('#supplierEmail').val();
-    var phone = $('#supplierPhone').val();
-    var address = $('#supplierAddress').val();
-
-    if (id) {
-        // Edit existing supplier
-        var supplier = suppliers.find(supplier => supplier.id == id);
-        supplier.name = name;
-        supplier.email = email;
-        supplier.phone = phone;
-        supplier.address = address;
-    } else {
-        // Add new supplier
-        var newID = suppliers.length ? Math.max(...suppliers.map(s => s.id)) + 1 : 1;
-        suppliers.push({
-            id: newID,
-            name: name,
-            email: email,
-            phone: phone,
-            address: address
+        const form = $(this);
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function(response) {
+                if ($(response).find('.text-danger').length > 0 || $(response).find('#emailError').length > 0 || $(response).find('#generalError').length > 0) {
+                    // If there are validation errors in the response, update the modal content
+                    $('#SupplierModal .modal-content').html(response);
+                    supplierModal.show(); // Ensure the modal is shown
+                } else {
+                    // If no errors, show success message and reload the supplier table
+                    alert('Supplier added successfully');
+                    supplierModal.hide();
+                    resetSupplierForm();
+                    // Reload the supplier table fragment
+                    $.get('/admin/suppliers .content > div', function(newContent) {
+                        $('.content > div').html(newContent);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error adding supplier: ' + error);
+            }
         });
-    }
-    $('#supplierModal').modal('hide');
-    populateTable();
-});
+    });
 
-// Add Supplier button click event
-$('#addSupplierBtn').click(function () {
-    // Clear the form and switch to Add mode
-    $('#supplierID').val('');
-    $('#supplierName').val('');
-    $('#supplierEmail').val('');
-    $('#supplierPhone').val('');
-    $('#supplierAddress').val('');
-    $('#supplierModalLabel').text("Add Supplier");
-    $('#modalSubmitBtn').text("Add Supplier");
-    $('#supplierModal').modal('show');
-});
+    // Open the edit supplier modal and populate data
+    $(document).on('click', '#editSupplierBtn', function() {
+        $('#editSupplierModalLabel').text("Edit Supplier");
+        editSupplierModal.show();
+        const supplierId = $(this).data('id');
+        const name = $(this).data('name');
+        const email = $(this).data('email');
+        const phone = $(this).data('phone');
+        const address = $(this).data('address');
 
-$('#search').on('input', function () {
-    var searchText = $(this).val().toLowerCase();
-    var filteredSuppliers = suppliers.filter(supplier =>
-        supplier.name.toLowerCase().includes(searchText) ||
-        supplier.email.toLowerCase().includes(searchText)
-    );
-    var tableBody = $('#supplierTable');
-    tableBody.empty();
-    filteredSuppliers.forEach(function (supplier) {
-        tableBody.append(
-            `<tr>
-                <td>${supplier.id}</td>
-                <td>${supplier.name}</td>
-                <td>${supplier.email}</td>
-                <td>${supplier.phone}</td>
-                <td>${supplier.address}</td>
-                <td>
-                    <button class="btn btn-edit btn-sm" onclick="editSupplier(${supplier.id})">Edit</button>
-                    <button class="btn btn-delete btn-sm" onclick="deleteSupplier(${supplier.id})">Delete</button>
-                </td>
-            </tr>`
-        );
+        $('#editSupplierModal #editSupplierId').val(supplierId);
+        $('#editSupplierModal #editSupplierName').val(name);
+        $('#editSupplierModal #editSupplierEmail').val(email);
+        $('#editSupplierModal #editSupplierPhno').val(phone);
+        $('#editSupplierModal #editSupplierAddr').val(address);
+        $('#editSupplierModal .text-danger').empty(); // Clear any previous error messages
+    });
+
+    // Handle the edit supplier form submission
+    editSupplierForm.on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = $(this);
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action').replace('{id}', $('#editSupplierId').val()), // Include the ID in the URL
+            data: form.serialize(),
+            success: function(response) {
+                if ($(response).find('.text-danger').length > 0 || $(response).find('#editEmailError').length > 0 || $(response).find('#editGeneralError').length > 0) {
+                    // If there are validation errors in the response, update the modal content
+                    $('#editSupplierModal .modal-content').html(response);
+                    editSupplierModal.show(); // Ensure the modal is shown
+                } else {
+                    // If no errors, show success message and reload the supplier table
+                    alert('Supplier updated successfully');
+                    editSupplierModal.hide();
+                    resetEditSupplierForm();
+                    // Reload the supplier table fragment
+                    $.get('/admin/suppliers .content > div', function(newContent) {
+                        $('.content > div').html(newContent);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                // Instead of just alerting, try to update the modal with the error response
+                $('#editSupplierModal .modal-content').html(xhr.responseText);
+                editSupplierModal.show();
+                // Optionally, log the error for debugging
+                console.error("Error updating supplier:", error, xhr);
+            }
+        });
     });
 });
 
-// Initial population of the supplier table
-$(document).ready(function () {
-    populateTable();
-});
+function resetSupplierForm() {
+    $('#supplierModal form')[0].reset();
+    $('#SupplierModal .text-danger').empty(); // Clear any error messages on reset
+}
 
- // Handle Logout functionality
-    // Populate modal with user details when the logout button is clicked
-    $('#logoutButton').click(function (e) {
-        e.preventDefault(); // Prevent default action for the logout link
-        const loginName = "admin"; // Example user name
-        const loginEmail = "admin@gmail.com"; // Example user email
-        $('#modalUserName').text(loginName); // Populate modal with user name
-        $('#modalUserEmail').text(loginEmail); // Populate modal with user email
- 
-        // Show the logout confirmation modal
-        $('#logoutModal').modal('show');
-    });
- 
-    // Cancel Logout Functionality
-    $('#cancelLogout').click(function () {
-        $('#logoutModal').modal('hide'); // Simply hide the modal without any further action
-    });
- 
-    // Handle "Logout" confirmation in the modal
-    $('#confirmLogout').click(function () {
-        $('#logoutModal').modal('hide'); // Hide the modal
-        console.log("User has logged out."); // Log the action
-         // Notify the user (can be replaced with actual logout logic)
-        // Redirect to the login page or perform other logout actions
-        window.location.href = '../Login/login.html'; // Replace with your actual login page
-    });
- 
+function resetEditSupplierForm() {
+    $('#editSupplierModal form')[0].reset();
+    $('#editSupplierModal .text-danger').empty(); // Clear any error messages on reset
+}

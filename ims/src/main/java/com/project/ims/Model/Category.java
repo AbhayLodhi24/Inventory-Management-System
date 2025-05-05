@@ -1,4 +1,4 @@
-package com.project.ims.Model;
+package com.project.ims.model;
  
 import java.util.List;
 
@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
  
 @Entity
@@ -19,29 +18,31 @@ import jakarta.persistence.Table;
 @Scope("prototype")
 @Component
 public class Category {
+
 	@Id
-	@SequenceGenerator(
-	        name = "category_sequence",
-	        sequenceName = "category_id_sequence",
-	        allocationSize = 1
-	    )
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
-	@Column(name="CATEGORY_ID")
-	private Integer categoryId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
+    private Integer categoryId; // Rename this field to 'id'
 	
-	@Column(name="CATEGORY_NAME")
-	private String categoryName;
+    @Column(name = "category_name", nullable = false, unique = true)
+    private String categoryName;
 	
 	@Column(name="CATEGORY_DESCRIPTION")
 	private String category_description;
 	
 	@OneToMany(mappedBy = "category")
     private List<Products> products;
+
+
 	
 	public Integer getCategoryId() {
 		return categoryId;
 	}
- 
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
 	public String getCategoryName() {
 		return categoryName;
 	}

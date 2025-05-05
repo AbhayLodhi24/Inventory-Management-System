@@ -1,4 +1,4 @@
-/* Sidebar Styling */
+/* Sidebar Styling - Base styles for larger screens */
 .sidebar {
     height: 100vh; /* Full height */
     position: fixed; /* Fix it on the left */
@@ -7,15 +7,16 @@
     background: #212529;
     color: white;
     padding: 20px;
-    overflow-y: auto; /* Allow scrolling if needed */
+    width: 17%; /* Default width for larger screens */
+    overflow-y: auto; /* In case the content overflows */
+    z-index: 1000; /* Ensure it's above other content */
+    transition: width 0.3s ease; /* Smooth transition for width changes */
 }
+
 .sidebar h4 {
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
-}
-.sidebar .active {
-    color: #ffc107;
 }
 
 .nav-link {
@@ -23,23 +24,146 @@
     font-size: 16px;
     padding: 12px;
     transition: 0.3s;
+    display: flex;
+    align-items: center; /* Align icon and text vertically */
 }
+
 .nav-link:hover {
-    color: #ffc107 !important; /* Bootstrap's text-warning color */
+    color: #ffc107 !important;
     background: #343a40;
     border-radius: 5px;
 }
+
 .nav-link i {
     margin-right: 10px;
+    font-size: 1.2em; /* Adjust icon size if needed */
 }
 
-/* Main content */
+/* Hide text by default on smaller screens */
+.side-label {
+    display: block; /* Ensure it takes space for transition */
+    opacity: 1;
+    transition: opacity 0.3s ease, margin-left 0.3s ease;
+    margin-left: 10px;
+}
+
+/* Adjust the .content width - Base style */
 .content {
-    margin-left: 18%; /* Push content to the right (same as col-3 width) */
+    margin-left: 17%; /* Keep the margin */
     padding: 20px;
-    width: 80%; /* Same as col-9 width */
+    width: calc(100% - 17%); /* Content takes the remaining width */
+    transition: margin-left 0.3s ease, width 0.3s ease; /* Smooth transition */
 }
 
-.btn-no-underline{
-    text-decoration: none !important;
+.modal-dialog {
+    max-width: 400px; /* Adjust the width as needed */
+    margin: 1.75rem auto; /* Adjust the margin as needed */
+    height: 20%;
+}
+
+#plus{
+	position: relative;
+	left: 2px;
+}
+
+body {
+    background-color: #f8f9fa;
+    overflow-x: hidden; /* As a last resort */
+}
+
+
+/* Style to make the table borders rounded */
+.table-bordered {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border-top: 1px solid #ced4da;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border-left: 1px solid #ced4da;
+    border-right: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+}
+
+.table-bordered tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-bordered th:first-child,
+.table-bordered td:first-child {
+    border-left: none;
+}
+
+.table-bordered th:last-child,
+.table-bordered td:last-child {
+    border-right: none;
+}
+
+/* Media query for tablet screens (max-width: 991px - Bootstrap's breakpoint for md) */
+@media (max-width: 991px) {
+    .sidebar {
+        width: 55px; /* Smaller width to just fit icons */
+        padding: 10px 5px; /* Reduce padding */
+    }
+
+    .sidebar h4 {
+        display: none; /* Hide the title */
+    }
+
+    .side-label {
+        display: none; /* Hide the text */
+        opacity: 0;
+        margin-left: 0;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0; /* No margin needed when text is hidden */
+        font-size: 1.5em; /* Make icons a bit larger */
+        justify-content: center; /* Center the icon in the reduced width */
+        display: flex;
+    }
+
+    .content {
+        margin-left: 55px; /* Adjust content margin to match smaller sidebar */
+        width: calc(100% - 55px);
+    }
+
+    .search-container {
+        flex-direction: column; /* Stack search elements on smaller screens */
+        align-items: flex-start; /* Align items to the left */
+    }
+
+    .search-container > * {
+        width: 100% !important; /* Make search elements full width */
+        margin-bottom: 10px;
+    }
+}
+
+/* Media query for mobile screens (max-width: 575px - Bootstrap's breakpoint for sm) */
+@media (max-width: 575px) {
+    .sidebar {
+        width: 40px; /* Even smaller for mobile */
+        padding: 10px 0px; /* Further reduce horizontal padding */
+    }
+
+    .sidebar .nav-link i {
+        font-size: 1.4em; /* Slightly larger icons for touch */
+    }
+
+    .content {
+        margin-left: 40px; /* Adjust content margin */
+        width: calc(100% - 40px);
+        padding: 10px; /* Reduce padding on small screens */
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Enable horizontal scrolling for tables on small screens */
+    }
+
+    .table {
+        width: 100%; /* Ensure table doesn't overflow its container */
+    }
 }

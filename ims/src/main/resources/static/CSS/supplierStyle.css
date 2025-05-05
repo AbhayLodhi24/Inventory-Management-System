@@ -1,18 +1,19 @@
 /* Sidebar Styling */
 .sidebar {
-    height: 100vh;
+    height: 100vh; /* Full height */
+    position: fixed; /* Fix it on the left */
+    top: 0;
+    left: 0;
     background: #212529;
-    padding: 20px;
     color: white;
+    padding: 20px;
+    overflow-y: auto; /* Allow scrolling if needed */
 }
 .sidebar h4 {
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
 }
-.sidebar .active {
-    color: #ffc107;
-}
 .nav-link {
     color: white;
     font-size: 16px;
@@ -20,7 +21,7 @@
     transition: 0.3s;
 }
 .nav-link:hover {
-    color: #ffc107 !important; /* Using Bootstrap's text-warning color */
+    color: #ffc107 !important; /* Bootstrap's text-warning color */
     background: #343a40;
     border-radius: 5px;
 }
@@ -28,76 +29,56 @@
     margin-right: 10px;
 }
 
+
+/* Main content */
 .content {
-    flex-grow: 1;
+    margin-left: 18%; /* Push content to the right (same as col-3 width) */
     padding: 20px;
+    width: 80%; /* Same as col-9 width */
 }
 
-.btn-edit {
-    background-color: #ffc107;
-    color: white;
+.modal-dialog {
+    max-width: 400px; /* Adjust the width as needed */
+    margin: 1.75rem auto; /* Adjust the margin as needed */
+    height: 20%;
 }
 
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
+#plus{
+	position: relative;
+	left: 2px;
 }
 
-.search-bar {
-    margin-bottom: 20px;
+/* Style to make the table borders rounded */
+.table-bordered {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px; /* Adjust the value for more or less rounded corners */
+    overflow: hidden; /* To contain the rounded corners */
+    border-top: 1px solid #ced4da; /* Add a top border to the table */
+    border-top: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+    
 }
 
-h2 {
-    margin-bottom: 1.5rem;
-}
-
-/* Sidebar Styling */
-.sidebar {
-    height: 100vh;
-    background: #212529;
-    padding: 20px;
-    color: white;
-}
-
-.sidebar h2 {
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.nav-link {
-    color: white;
-    font-size: 16px;
-    padding: 12px;
-    transition: 0.3s;
-}
-
-.nav-link:hover {
-    color: #ffc107 !important;
-    /* Using Bootstrap's text-warning color */
-    background: #343a40;
-    border-radius: 5px;
-}
-
-.nav-link i {
-    margin-right: 10px;
+.table-bordered th,
+.table-bordered td {
+    border-left: 1px solid #ced4da; /* Light gray border color */
+    border-right: 1px solid #ced4da; /* Light gray border color */
+    border-bottom: 1px solid #ced4da; /* Add a bottom border to each cell */
 }
 
 
 
+.table-bordered tbody tr:last-child td {
+    border-bottom: none; /* Remove bottom border for the last row cells to maintain rounded look */
+}
 
+.table-bordered th:first-child,
+.table-bordered td:first-child {
+    border-left: none; /* Remove left border for the first column cells */
+}
 
-@media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        display: none;
-    }
-
-    .content {
-        padding: 10px;
-        width: 100%;
-    }
+.table-bordered th:last-child,
+.table-bordered td:last-child {
+    border-right: none; /* Remove right border for the last column cells */
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -99,15 +100,13 @@ public class Products {
 		this.supplier = supplier;
 	}
 
-
-	@ManyToOne
-    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", nullable = false, insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID", nullable = false)
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "SUPPLIER_ID", referencedColumnName = "SUPPLIER_ID", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SUPPLIER_ID", referencedColumnName = "SUPPLIER_ID", nullable = false)
     private Supplier supplier;
-
 
   
 }

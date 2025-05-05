@@ -1,82 +1,179 @@
-$(document).ready(function(){
+$(document).ready(function() {
+    const addUserModal = $('#addUserModal');
+    const addUserForm = $('#addUserForm');
+    const userIdInput = $('#userId');
+    let isErrorState = false;
 
-    // Handle Logout functionality
-    // Populate modal with user details when the logout button is clicked
-    $('#logoutButton').click(function (e) {
-        e.preventDefault(); // Prevent default action for the logout link
-        const loginName = "admin"; // Example user name
-        const loginEmail = "admin@gmail.com"; // Example user email
-        $('#modalUserName').text(loginName); // Populate modal with user name
-        $('#modalUserEmail').text(loginEmail); // Populate modal with user email
-        console.log('Working');
-        // Show the logout confirmation modal
-        $('#logoutModal').modal('show');
-    });
- 
-    // Cancel Logout Functionality
-    $('#cancelLogout').click(function () {
-        $('#logoutModal').modal('hide'); // Simply hide the modal without any further action
-    });
- 
-    // Handle "Logout" confirmation in the modal
-    $('#confirmLogout').click(function () {
-        $('#logoutModal').modal('hide'); // Hide the modal
-        window.location.href = "../Login/login.html"; // Replace with your actual login page
-    });
+    function updateErrorDisplay(fieldId, errorMessage) {
+        const inputElement = $('#' + fieldId);
+        const errorElement = inputElement.next('.text-danger');
+        if (errorMessage) {
+            if (errorElement.length === 0) {
+                inputElement.after(`<div class="text-danger small">${errorMessage}</div>`);
+            } else {
+                errorElement.text(errorMessage);
+            }
+            inputElement.addClass('is-invalid');
+            console.log(`Error for ${fieldId}: ${errorMessage}`);
+        } else {
+            inputElement.removeClass('is-invalid');
+            if (errorElement.length > 0) {
+                errorElement.remove();
+            }
+            console.log(`Cleared error for ${fieldId}`);
+        }
+    }
 
-    //Search functionality
-    $('#search').on('keyup', function() {
-        const value = $(this).val().toLowerCase();
-        $('tbody tr').filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    function validateField(fieldId, validationFn) {
+        const inputElement = $('#' + fieldId);
+        inputElement.on('input', function() {
+            const errorMessage = validationFn(inputElement.val());
+            updateErrorDisplay(fieldId, errorMessage);
         });
+    }
+
+    validateField('username', function(value) {
+        if (value.trim() === "") {
+            return 'Username is required.';
+        } else if (value.trim().length < 3 || value.trim().length > 50) {
+            return 'Username must be between 3 and 50 characters.';
+        }
+        return '';
     });
 
-     //add new user button
-     $('#addUserbtn').click(function(){
-        $('#modal').modal('show');
+    validateField('password', function(value) {
+        let errorMessage = '';
+        if (value === "") {
+            errorMessage += 'Password is required. ';
+        } else {
+            if (value.length < 8) {
+                errorMessage += 'Password must be at least 8 characters. ';
+            }
+            if (!/[A-Z]/.test(value)) {
+                errorMessage += 'Password must contain at least one uppercase letter. ';
+            }
+            if (!/[0-9]/.test(value)) {
+                errorMessage += 'Password must contain at least one number. ';
+            }
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+                errorMessage += 'Password must contain at least one special character. ';
+            }
+        }
+        return errorMessage.trim();
     });
 
-    // Delete Row
-    $(document).on('click', '.deleteButton', function () {
-        $(this).closest('tr').remove();
-
-        // Recalculate UIDs after deletion
-        $(".uid").each(function (index) {
-            $(this).text(index + 1);
-        });
+    validateField('email', function(value) {
+        if (value.trim() === "") {
+            return 'Email is required.';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            return 'Invalid email format.';
+        } else if (value.trim().length > 100) {
+            return 'Email cannot exceed 100 characters.';
+        }
+        return '';
     });
 
-    // Add new row
-    $('#userForm').submit(function(event){
+    validateField('address', function(value) {
+        if (value.trim() === "") {
+            return 'Address is required.';
+        } else if (value.trim().length < 2 || value.trim().length > 255) {
+            return 'Address must be between 2 and 255 characters.';
+        }
+        return '';
+    });
+
+    addUserForm.on('submit', function(event) {
         event.preventDefault();
-        const name = $('#name').val();
-        const email = $('#mail').val();
-        const pwd = $('#pwd').val();
-        const address = $('#address').val();
-        const role = $('#role').val();
-        let uid = $('.uid').last().text();
-        let new_uid = parseInt(uid)+1;
-        if(!name || !email || !pwd || !address || !role){
-            alert("Please fill all fields");
-        }
-        else{
-            const newRow = `
-            <tr>
-                <td class="uid">${new_uid}</td>
-                <td class="name">${name}</td>
-                <td class="email">${email}</td>
-                <td class="role">${role}</td>
-                <td>
-                    <button class="btn btn-link deleteButton text-danger btn-no-underline">Delete</button>
-                </td>
-            </tr>`;
-            $('tbody').append(newRow);
+        isErrorState = false;
 
-            // Clear form inputs
-            $("#userForm")[0].reset();
+        let hasClientSideErrors = false;
+        const clientSideErrorMessages = [];
+
+        $('#username, #password, #email, #address').each(function() {
+            const fieldId = $(this).attr('id');
+            const errorMessage = $(this).next('.text-danger').text();
+            if (errorMessage) {
+                clientSideErrorMessages.push(errorMessage);
+                hasClientSideErrors = true;
+            }
+        });
+
+        if (hasClientSideErrors) {
+            alert(clientSideErrorMessages.join('\n'));
+            addUserModal.modal('show');
+            isErrorState = true;
+        } else {
+            const formData = $(this).serialize();
+            $.ajax({
+                url: '/admin/users/addUser',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    const tempDiv = $('<div>').html(response);
+                    const serverErrorAlert = tempDiv.find('.alert.alert-danger');
+                    const invalidFields = tempDiv.find('.is-invalid');
+                    const serverErrorMessages = [];
+
+                    if (serverErrorAlert.length > 0) {
+                        serverErrorMessages.push(serverErrorAlert.text());
+                    }
+                    tempDiv.find('.is-invalid').each(function() {
+                        const label = $(this).siblings('label').text();
+                        const errorMessage = $(this).next('.invalid-feedback').text();
+                        if (label && errorMessage) {
+                            serverErrorMessages.push(`${label}: ${errorMessage}`);
+                        } else if (label) {
+                            serverErrorMessages.push(`Please correct the ${label.toLowerCase()}.`);
+                        } else {
+                            serverErrorMessages.push("Please correct the highlighted fields.");
+                        }
+                    });
+
+                    if (serverErrorMessages.length > 0) {
+                        alert(serverErrorMessages.join('\n'));
+                        addUserModal.modal('show');
+                        isErrorState = true;
+                    } else {
+                        addUserModal.modal('hide');
+                        window.location.href = '/admin/users'; // Redirect on successful add
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errorMessage = "An error occurred while adding the user.";
+                    if (xhr.responseText) {
+                        const tempDiv = $('<div>').html(xhr.responseText);
+                        const serverErrorMessageElement = tempDiv.find('.alert.alert-danger');
+                        if (serverErrorMessageElement.length) {
+                            errorMessage = serverErrorMessageElement.text();
+                        }
+                        addUserModal.find('.modal-content').html(tempDiv.find('.modal-content').html());
+                    }
+                    alert(errorMessage);
+                    addUserModal.modal('show');
+                    isErrorState = true;
+                }
+            });
         }
     });
 
+    addUserModal.on('hidden.bs.modal', function (e) {
+        if (!isErrorState) {
+            // Only redirect if the modal was closed without an error
+            window.location.href = '/admin/users';
+        } else {
+            // Reset the error state so that the next time the modal is closed
+            // without an error, the redirection happens.
+            isErrorState = false;
+        }
+        addUserForm[0].reset();
+        addUserForm.find('.is-invalid').removeClass('is-invalid');
+        userIdInput.val(0);
+        addUserForm.attr('action', '/admin/users/addUser');
+    });
 
+    $('#addUserModal .btn-secondary[data-bs-dismiss="modal"]').on('click', function() {
+        addUserModal.modal('hide'); // Trigger the 'hidden.bs.modal' event
+    });
 });
+
+ 
