@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Denied</title>
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+<style>
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	background-color: #f8f9fa; /* Light background */
+	color: #343a40; /* Dark text */
+}
+
+.error-container {
+	text-align: center;
+	padding: 30px;
+	border-radius: 8px;
+	background-color: #fff;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.error-container h1 {
+	font-size: 6rem;
+	color: #dc3545; /* Red color for status code */
+	margin-bottom: 20px;
+}
+
+.error-container h2 {
+	font-size: 1.5rem;
+	margin-bottom: 20px;
+}
+
+.error-container p {
+	font-size: 1rem;
+	color: #6c757d; /* Grayish text */
+}
+
+.btn-dashboard {
+	margin-top: 20px;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+	<div class="error-container">
+		<h1>404</h1>
+		<h2>Page Not Found</h2>
+		<p>The page or resource you are looking for could not be found.</p>
+		<p>Please check the URL for typos or navigate to the homepage.</p>
+		<button class="btn btn-primary btn-dashboard"
+			id="dashboardRedirectButton">Go to Dashboard</button>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							$('#dashboardRedirectButton')
+									.click(
+											function() {
+												// Make an AJAX call to the server endpoint
+												$
+														.ajax({
+															url : '/user/get-dashboard-url', // This URL calls the method in UserController
+															method : 'GET',
+															success : function(
+																	dashboardUrl) {
+																// On success, redirect the browser to the received URL
+																if (dashboardUrl) {
+																	window.location.href = dashboardUrl;
+																} else {
+																	// Fallback
+																	window.location.href = '/';
+																}
+															},
+															error : function(
+																	jqXHR,
+																	textStatus,
+																	errorThrown) {
+																// Handle potential errors
+																console
+																		.error(
+																				"Error getting dashboard URL: "
+																						+ textStatus,
+																				errorThrown);
+																// Fallback redirect on error
+																window.location.href = '/';
+															}
+														});
+											});
+						});
+	</script>
+
+</body>
+</html>
