@@ -1,7 +1,6 @@
 package com.project.ims.Service;
  
 import java.time.LocalDateTime;
-
 import java.util.List;
  
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import com.project.ims.Model.Products;
 import com.project.ims.Repository.UserRepository;
  
 import jakarta.transaction.Transactional;
-
 import com.project.ims.Repository.OrdersRepository;
 import com.project.ims.Model.*;
  
@@ -23,7 +21,6 @@ public class UserOrderService {
     
     @Autowired
     private UserProductService productService;
-
  
     @Autowired
     private OrdersRepository orderRepository;

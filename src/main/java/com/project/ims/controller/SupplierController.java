@@ -53,7 +53,6 @@ public class SupplierController {
         }
         return "redirect:/admin/suppliers"; // Redirects to the supplier list page
     }
-
     @PostMapping("/addSupplier")
     public String addSuppliers(@Valid @ModelAttribute("supp") SupplierDto supplierDTO,
                                BindingResult bindingResult,

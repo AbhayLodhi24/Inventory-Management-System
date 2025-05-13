@@ -57,10 +57,6 @@
                 <tbody th:fragment="categoryTable">
                     <tr th:each="category,stat : ${categoriesList}">
                         <td th:text="${stat.index + 1}"></td>
-                        <td th:text="${category.categoryName}"></td>
-                        <td th:text="${category.categoryDescription}"></td>
-                        <td class="d-flex gap-2">
-                            <button id="editCategoryBtn"
                                     class="btn btn-outline-primary btn edit-btn"
                                     th:data-id="${category.categoryId}"
                                     th:data-name="${category.categoryName}"
