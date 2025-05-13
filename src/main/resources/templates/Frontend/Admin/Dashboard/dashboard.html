@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>StockWise</title>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet"
+		  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet"
+		  href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+	<link rel="stylesheet"
+		  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" th:href="@{/Css/dashboardStyle.css}">
+
+	<!-- Chart.js -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light p-4">
+<div class="container-fluid">
+	<div class="row">
+		<!-- Sidebar -->
+		<div th:replace="~{Frontend/Admin/Common/Sidebar :: navbar}"></div>
+
+		<!-- Logout Modal  -->
+		<div th:replace="~{Frontend/Admin/Common/LogoutModel :: logoutModal}"></div>
+
+		<!-- Main Content -->
+		<main class="col-md-9 col-lg-10 content bg-light">
+			<h3 class="fs-1 fw-bolder mb-4">Dashboard</h3>
+
+			<!-- Dashboard Cards (Static) -->
+			<div class="row">
+				<div class="col-md-3">
+					<div class="dashboard-card blue-card">
+						Total Products <br> <span
+							th:text="${dashboardData.totalProducts}"></span>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="dashboard-card green-card">
+						Total Stock <br> <span th:text="${dashboardData.totalStock}"></span>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="dashboard-card yellow-card">
+						Order Today <br> <span th:text="${dashboardData.orderToday}"></span>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="dashboard-card purple-card">
+						Revenue <br> ₹<span th:text="${dashboardData.revenue}"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt-4">
+
+				<!-- Line Chart Revenue Trend -->
+				<div class="col-md-4 mb-4">
+					<div class="card dashboard-graph-card bg-light bg-gradient">
+						<div class="card-body ">
+							<h5 class="mb-3 card-title">Revenue Trend</h5>
+							<canvas id="revenueTrendChart"></canvas>
+						</div>
+					</div>
+				</div>
+
+				<!-- Bar Chart: Orders per day -->
+				<div class="col-md-4 mb-4">
+					<div class="card dashboard-graph-card bg-light bg-gradient">
+						<div class="card-body">
+							<h5 class="mb-3 card-title">Orders Per Day</h5>
+							<canvas id="ordersPerDayChart"></canvas>
+						</div>
+					</div>
+				</div>
+
+				<!-- Horizontal Bar: Revenue by Category -->
+				<div class="col-md-4 mb-4">
+					<div class="card dashboard-graph-card bg-light bg-gradient">
+						<div class="card-body">
+							<h5 class="mb-3 card-title">Revenue by Category</h5>
+							<canvas id="revenueByCategoryChart"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/JS/dashboardScript.js}"></script>
+<script th:src="@{/JS/adminLogoutScript.js}"></script>
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+    var revenueTrendLabels = /*[[${revenueTrendLabels}]]*/null;
+    var revenueTrendValues = /*[[${revenueTrendValues}]]*/null;
+
+    var ordersPerMonthLabels = /*[[${ordersPerDayLabels}]]*/null;
+    var ordersPerMonthValues = /*[[${ordersPerDayValues}]]*/null;
+
+    var revenueByCategoryLabels = /*[[${revenueByCategoryLabels}]]*/null;
+    var revenueByCategoryValues = /*[[${revenueByCategoryValues}]]*/null;
+
+    /*]]>*/
+</script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+         // Line chart: Revenue trend (by month)
+        new Chart(document.getElementById('revenueTrendChart'), {
+            type: 'line',
+            data: {
+                labels: revenueTrendLabels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: revenueTrendValues,
+                    borderColor: '#a279ec',
+                    backgroundColor: '#a279ec22',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true },
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Bar chart: Orders per month
+        new Chart(document.getElementById('ordersPerDayChart'), { // keep the old canvas id!
+            type: 'bar',
+            data: {
+                labels: ordersPerMonthLabels,
+                datasets: [{
+                    label: 'Orders',
+                    data: ordersPerMonthValues,
+                    backgroundColor: '#5cdff6cc',
+                    borderColor: '#5cdff6',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true },
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // PIE chart: Revenue by Category!
+        new Chart(document.getElementById('revenueByCategoryChart'), {
+            type : 'pie',
+            data : {
+                labels : revenueByCategoryLabels,
+                datasets : [ {
+                    label : 'Revenue',
+                    data : revenueByCategoryValues,
+                    backgroundColor : [ '#f9a857cc', '#5cdff6cc',
+                            '#a279ec', '#ffc107cc', '#007bffcc',
+                            '#28a745cc' ],
+                    borderColor : '#fff',
+                    borderWidth : 2
+                } ]
+            },
+            options : {
+                plugins : {
+                    legend : {
+                        display : true
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

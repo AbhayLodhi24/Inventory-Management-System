@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockWise</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<link rel="icon"
+	href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+
+<link rel="stylesheet" th:href="@{/Css/UserCSS/productsStyle.css}">
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+		
+			<div th:replace="~{/Frontend/Admin/Common/UserSidebar :: userSidebar}"></div>
+
+			<div th:replace="~{Frontend/Admin/Common/LogoutModel :: logoutModal}"></div>
+
+			<main class="col-md-9 col-lg-10 content bg-light">
+				<div id="products" class="content-section">
+					<h1 class="fs-1 fw-bolder mb-4">Products</h1>
+
+					<div class="search-container">
+						<select id="categoryFilter" class="form-control"
+							style="width: 200px;">
+							<option value="">Select Category</option>
+							<option th:each="categoryName : ${uniqueCategories}"
+								th:value="${categoryName}" th:text="${categoryName}"></option>
+						</select> <input type="text" id="searchInput" class="form-control"
+							placeholder="Search products..." style="width: 300px;">
+					</div>
+
+
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>Name</th>
+									<th>Category</th>
+									<th>Price</th>
+									<th>Stock</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody id="productTableBody" class="bg-white">
+								<tr th:each="product : ${productsUserList}">
+									<td class="name" th:text="${product.name}"></td>
+									<td class="category" th:text="${product.category.categoryName}"></td>
+									<td class="price"
+										th:text="${'₹' + #numbers.formatDecimal(product.price, 1, 2)}"></td>
+									<td class="stock" th:data-stock="${product.stock}"><span
+										class="badge"
+										th:classappend="${product.stock > 10 ? 'badge border border-success text-success' : (product.stock > 0 ? 'badge border border-warning text-warning' : 'badge border border-danger text-danger')}"
+										th:text="${product.stock}"> </span></td>
+									<td><button class="btn btn-outline-primary btn-sm order-btn"
+											th:data-product-name="${product.name}"
+											th:data-product-category-name="${product.category.categoryName}"
+											th:data-product-stock="${product.stock}" data-toggle="modal"
+											data-target="#orderModal">Order <i class="bi bi-cart4"></i></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+
+	<div class="modal fade" id="orderModal" tabindex="-1" role="dialog"
+		aria-labelledby="orderModalLabel" aria-hidden="true">
+		<div class="modal-dialog " role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="orderModalLabel">Place Orders</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form th:action="@{/user/place-order}" method="post">
+
+						<div class="form-group">
+							<label for="stockQuantity">Available Stock:</label> <input
+								type="text" id="stockQuantity" class="form-control  text-center"
+								readonly>
+						</div>
+						<div class="form-group">
+							<label for="quantity">Enter Quantity:</label> <input
+								type="number" class="form-control  text-center " id="quantity"
+								name="quantity" min="1" required>
+						</div>
+						<input type="hidden" id="productName" name="productName" /> <input
+							type="hidden" id="categoryName" name="categoryName" /> <input
+							type="hidden" th:if="${user != null}" th:value="${user.userId}"
+							name="userId"> <input type="hidden"
+							th:if="${user == null}" value="0" name="userId">
+
+						<div class="modal-footer">
+							<div class="row justify-content-start">
+								<div class="col-md-6">
+									<button type="submit" class="btn btn-primary ">Place&nbsp;Order</button>
+								</div>
+								<div class="col-md-6">
+									<button type="button" class="btn btn-secondary "
+										data-dismiss="modal">Cancel</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script th:src="@{/JS/UserJS/productsScript.js}"></script>
+	<script th:src="@{/JS/adminLogoutScript.js}"></script>
+</body>
+</html>
